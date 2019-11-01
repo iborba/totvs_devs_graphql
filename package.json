@@ -1,0 +1,36 @@
+{
+  "name": "totvs_devs_graphql",
+  "version": "1.0.0",
+  "description": "A project written with Typescript, Sucrase and GraphQL",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon src/server.ts",
+    "build": "sucrase ./src -d ./build --transform imports"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iborba/totvs_devs_graphql.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iborba/totvs_devs_graphql/issues"
+  },
+  "homepage": "https://github.com/iborba/totvs_devs_graphql#readme",
+  "devDependencies": {
+    "@types/express-graphql": "^0.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.6.0",
+    "@typescript-eslint/parser": "^2.6.0",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.18.2",
+    "sucrase": "^3.10.1",
+    "typescript": "^3.6.4"
+  },
+  "dependencies": {
+    "express-graphql": "^0.9.0"
+  }
+}
