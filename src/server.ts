@@ -7,9 +7,9 @@ const port = 3000
 const definition = {
   typeDefs: gql`
     type Query {
-      _empty: String
       users: [User!]!
       user(id: ID): User
+      posts: [Post!]!
     }
     
     type User {
@@ -19,15 +19,20 @@ const definition = {
       username: String
       phone: String
       website: String
+      posts: [Post]
+    }
+
+    type Post {
+      id: ID!
+      title: String!
+      body: String
     }
   `,
   resolvers: {
     Query: {
       users: () => fetch('https://jsonplaceholder.typicode.com/users').then(res => res.json()),
-      user: (_, args) => {
-        const { id } = args
-        return fetch(`https://jsonplaceholder.typicode.com/users/${id}`).then(res => res.json())
-      }
+      user: (_, args) => fetch(`https://jsonplaceholder.typicode.com/users/${args.id}`).then(res => res.json()),
+      posts: (_, __) => fetch('https://jsonplaceholder.typicode.com/posts').then(res => res.json())
     }
   }
 }
