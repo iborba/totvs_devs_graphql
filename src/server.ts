@@ -1,23 +1,35 @@
 import { ApolloServer, gql } from 'apollo-server'
 import { makeExecutableSchema } from 'graphql-tools'
+import fetch from 'node-fetch'
 
 const port = 3000
 
 const definition = {
   typeDefs: gql`
-      type Query {
-        _empty: String
-      }
-      
-      type Mutation { 
-        _empty: String
-      }
-
-      type Subscription { 
-        _empty: String
-      }
+    type Query {
+      _empty: String
+      users: [User!]!
+      user(id: ID): User
+    }
+    
+    type User {
+      id: ID!
+      name: String
+      email: String
+      username: String
+      phone: String
+      website: String
+    }
   `,
-  resolvers: {}
+  resolvers: {
+    Query: {
+      users: () => fetch('https://jsonplaceholder.typicode.com/users').then(res => res.json()),
+      user: (_, args) => {
+        const { id } = args
+        return fetch(`https://jsonplaceholder.typicode.com/users/${id}`).then(res => res.json())
+      }
+    }
+  }
 }
 
 const schema = makeExecutableSchema(definition)
