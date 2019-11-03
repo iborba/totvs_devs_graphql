@@ -6,7 +6,7 @@ const getUser = (id: number) => fetch(`https://jsonplaceholder.typicode.com/user
 const getPost = (id: number) => fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then(res => res.json())
 const getPostByUser = (userId: number) => fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`).then(res => res.json())
 
-module.exports = {
+const resolvers = {
   Query: {
     users: () => getUsers(),
     posts: (_, __) => getPosts(),
@@ -20,3 +20,5 @@ module.exports = {
     posts: parent => getPostByUser(parent.id)
   }
 }
+
+export default resolvers

@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server'
 
-module.exports = gql`
+const schema = gql`
     type Query {
       users: [User!]!
       posts: [Post!]!
@@ -25,3 +25,5 @@ module.exports = gql`
       userId: User
     }
   `
+
+export default schema

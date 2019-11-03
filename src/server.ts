@@ -1,8 +1,7 @@
 import { ApolloServer } from 'apollo-server'
 import { makeExecutableSchema } from 'graphql-tools'
-const typeDefs = require('./schema')
-const resolvers = require('./resolvers')
-const port = 3000
+import typeDefs from './schema'
+import resolvers from './resolvers'
 
 const definition = {
   typeDefs,
@@ -23,6 +22,6 @@ const serverConfig = {
 
 const server = new ApolloServer(serverConfig)
 
-server.listen(port).then(({ url }) => {
+server.listen(3000).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`)
 })
