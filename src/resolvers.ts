@@ -1,7 +1,7 @@
-import { User } from './classes/users'
+import { Users } from './classes/users'
 import { Posts } from './classes/posts'
 
-const user = new User()
+const user = new Users()
 const posts = new Posts()
 
 const resolvers = {
