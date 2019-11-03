@@ -1,38 +1,29 @@
-import { ApolloServer, gql } from 'apollo-server'
+import { ApolloServer } from 'apollo-server'
 import { makeExecutableSchema } from 'graphql-tools'
 import fetch from 'node-fetch'
-
+const typeDefs = require('./schema')
 const port = 3000
 
-const definition = {
-  typeDefs: gql`
-    type Query {
-      users: [User!]!
-      user(id: ID): User
-      posts: [Post!]!
-    }
-    
-    type User {
-      id: ID!
-      name: String
-      email: String
-      username: String
-      phone: String
-      website: String
-      posts: [Post]
-    }
+const getUsers = () => fetch('https://jsonplaceholder.typicode.com/users').then(res => res.json())
+const getPosts = () => fetch('https://jsonplaceholder.typicode.com/posts').then(res => res.json())
+const getUser = (id) => fetch(`https://jsonplaceholder.typicode.com/users/${id}`).then(async res => res.json())
+const getPost = (id) => fetch(`https://jsonplaceholder.typicode.com/posts/${id}`).then(res => res.json())
+const getPostByUser = (userId) => fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`).then(res => res.json())
 
-    type Post {
-      id: ID!
-      title: String!
-      body: String
-    }
-  `,
+const definition = {
+  typeDefs,
   resolvers: {
     Query: {
-      users: () => fetch('https://jsonplaceholder.typicode.com/users').then(res => res.json()),
-      user: (_, args) => fetch(`https://jsonplaceholder.typicode.com/users/${args.id}`).then(res => res.json()),
-      posts: (_, __) => fetch('https://jsonplaceholder.typicode.com/posts').then(res => res.json())
+      users: () => getUsers(),
+      posts: (_, __) => getPosts(),
+      user: (_, args) => getUser(args.id),
+      post: (_, args) => getPost(args.id)
+    },
+    Post: {
+      userId: parent => getUser(parent.userId)
+    },
+    User: {
+      posts: parent => getPostByUser(parent.id)
     }
   }
 }
