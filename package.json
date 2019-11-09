@@ -38,7 +38,9 @@
   },
   "dependencies": {
     "apollo-server": "^2.9.7",
+    "dotenv": "^8.2.0",
     "graphql-tools": "^4.0.6",
+    "lowdb": "^1.0.0",
     "node-fetch": "^2.6.0"
   }
 }

@@ -24,6 +24,10 @@ const schema = gql`
       body: String
       userId: User
     }
+
+    type Mutation {
+      createPost(title: String, body: String): String
+    }
   `
 
 export default schema

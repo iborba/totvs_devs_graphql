@@ -16,6 +16,11 @@ const resolvers = {
   },
   User: {
     posts: parent => posts.getPostByUser(parent.id)
+  },
+  Mutation: {
+    createPost: (title, body) => {
+      return 'OK'
+    }
   }
 }
 
