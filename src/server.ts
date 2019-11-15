@@ -1,27 +1,34 @@
-import { ApolloServer } from 'apollo-server'
-import { makeExecutableSchema } from 'graphql-tools'
-import typeDefs from './schema'
-import resolvers from './resolvers'
+import express from 'express'
+import graphqlHTTP from 'express-graphql'
+import { Users } from './repository/users'
+import { Posts } from './repository/posts'
+const schema = require('./schema')
+const user = new Users()
+const posts = new Posts()
 
-const definition = {
-  typeDefs,
-  resolvers
-}
+const app = express()
 
-const schema = makeExecutableSchema(definition)
+app.get('/', (_req, res) => {
+  return res.status(200).send('Hello world')
+})
 
-const serverConfig = {
+app.get('/posts', async (_req, res) => {
+  const result = await posts.getPosts()
+
+  res.status(200).send(result)
+})
+
+app.get('/users', async (_req, res) => {
+  const result = await user.getUsers()
+
+  res.status(200).send(result)
+})
+
+app.use('/graphql', graphqlHTTP({
   schema,
-  playGround: {
-    settings: {
-      'editor.theme': 'dark',
-      'editor.cursorShape': 'line'
-    }
-  }
-}
+  graphiql: true
+}))
 
-const server = new ApolloServer(serverConfig)
-
-server.listen(3000).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`)
+app.listen(3000, _ => {
+  console.log('🚀  Server ready at http://localhost:3000')
 })

@@ -1,33 +1,74 @@
-import { gql } from 'apollo-server'
+import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLList, GraphQLSchema } from 'graphql'
+import { Users } from './repository/users'
+import { Posts } from './repository/posts'
+const user = new Users()
+const posts = new Posts()
 
-const schema = gql`
-    type Query {
-      users: [User!]!
-      posts: [Post!]!
-      user(id: ID): User
-      post(id: ID): Post
-    }
-    
-    type User {
-      id: ID!
-      name: String
-      email: String
-      username: String
-      phone: String
-      website: String
-      posts: [Post]
-    }
+const userType = new GraphQLObjectType({
+  name: 'Author',
+  fields: {
+    id: { type: GraphQLID! },
+    name: { type: GraphQLString },
+    email: { type: GraphQLString },
+    username: { type: GraphQLString },
+    phone: { type: GraphQLString },
+    website: { type: GraphQLString }
+  }
+})
 
-    type Post {
-      id: ID!
-      title: String!
-      body: String
-      userId: User
+const postType = new GraphQLObjectType({
+  name: 'Post',
+  fields: {
+    id: { type: GraphQLID! },
+    title: { type: GraphQLString! },
+    body: { type: GraphQLString },
+    author: {
+      type: userType,
+      resolve: (source, _params) => {
+        return user.getUser(source.userId) // relacionamento
+      }
     }
+  }
+})
 
-    type Mutation {
-      createPost(title: String, body: String): String
+const queryType = new GraphQLObjectType({
+  name: 'Query',
+  fields: {
+    post: {
+      type: postType,
+      args: {
+        id: { type: GraphQLInt }
+      },
+      resolve: (_source, { id }) => {
+        return posts.getPost(id) // entidade
+      }
+    },
+    posts: {
+      type: new GraphQLList(postType),
+      resolve: () => {
+        return posts.getPosts()
+      }
+    },
+    author: {
+      type: userType,
+      args: {
+        id: { type: GraphQLID! }
+      },
+      resolve: (_source, { id }) => {
+        return user.getUser(id)
+      }
+    },
+    authors: {
+      type: new GraphQLList(userType),
+      resolve: () => {
+        return user.getUsers()
+      }
     }
-  `
+  }
+})
 
-export default schema
+const schema = new GraphQLSchema({
+  query: queryType
+})
+
+module.exports = schema
