@@ -4,48 +4,55 @@ import bodyparser from 'body-parser'
 import cors from 'cors'
 import { Posts } from './repository/posts'
 import { Users } from './repository/users'
-const posts = new Posts()
-const users = new Users()
+import { MongoClient } from 'mongodb'
 
-const schema = require('./schema')
-require('dotenv').config()
+(async function () {
+  const connection = await MongoClient.connect(process.env.MONGODB_URL, { useUnifiedTopology: true })
+  const db = connection.db('totvs_devs')
+  const posts = new Posts(db.collection(Posts.collectionName))
+  const users = new Users(db.collection(Users.collectionName))
 
-const app = express()
-app.use(bodyparser.json())
-app.use(cors({ origin: '*' }))
+  const schema = require('./schema')
+  require('dotenv').config()
 
-app.get('/', (_req, res) => {
-  return res.status(200).send('Hello world')
-})
 
-app.get('/posts', async (_req, res) => {
-  const result = await posts.getPosts()
-  return res.status(200).send(result)
-})
+  const app = express()
+  app.use(bodyparser.json())
+  app.use(cors({ origin: '*' }))
 
-app.post('/posts', (req, res) => {
-  const { title, description } = req.body
+  app.get('/', (_req, res) => {
+    return res.status(200).send('Hello world')
+  })
 
-  posts.createPost(title, description)
-  return res.status(200).send('Post criado com sucesso')
-})
+  app.get('/posts', async (_req, res) => {
+    const result = await posts.getPosts()
+    return res.status(200).send(result)
+  })
 
-app.post('/authors', (req, res) => {
-  const { name, address, email, phone } = req.body
-  users.createUser(name, address, email, phone)
-  return res.status(200).send('Usuário criado com sucesso')
-})
+  app.post('/posts', (req, res) => {
+    const { title, description } = req.body
 
-app.get('/authors', async (_req, res) => {
-  const result = await users.getUsers()
-  return res.status(200).send(result)
-})
+    posts.createPost(title, description)
+    return res.status(200).send('Post criado com sucesso')
+  })
 
-app.use('/graphql', graphqlHTTP({
-  schema,
-  graphiql: true
-}))
+  app.post('/authors', (req, res) => {
+    const { name, address, email, phone } = req.body
+    users.createUser(name, address, email, phone)
+    return res.status(200).send('Usuário criado com sucesso')
+  })
 
-app.listen(process.env.PORT, _ => {
-  console.log(`🚀  Server ready at http://localhost:${process.env.PORT}`)
-})
+  app.get('/authors', async (_req, res) => {
+    const result = await users.getUsers()
+    return res.status(200).send(result)
+  })
+
+  app.use('/graphql', graphqlHTTP({
+    schema,
+    graphiql: true
+  }))
+
+  app.listen(process.env.PORT, _ => {
+    console.log(`🚀  Server ready at http://localhost:${process.env.PORT}`)
+  })
+})()

@@ -35,10 +35,10 @@ spec:
                 - mongo
                 - --eval
                 - "db.adminCommand('ping')"
-            initialDelaySeconds: 90
+            initialDelaySeconds: 30
             periodSeconds: 60
             timeoutSeconds: 30
-            successThreshold: 5
+            successThreshold: 1
             failureThreshold: 3
           readinessProbe:
             exec:
@@ -49,10 +49,12 @@ spec:
             initialDelaySeconds: 30
             timeoutSeconds: 30
             periodSeconds: 60
-            successThreshold: 5
+            successThreshold: 1
             failureThreshold: 3
           ports:
             - containerPort: 27017
+              hostPort: 27017
+              protocol: TCP
               name: mongodb
 ---
 kind: Service
@@ -67,4 +69,5 @@ spec:
   ports:
     - name: mongodb
       port: 27017
+      protocol: TCP
       targetPort: mongodb
