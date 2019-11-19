@@ -14,4 +14,5 @@ export class Users {
 
   getUsers = () => this.userCollection.find({}).toArray()
   getUser = (id) => this.userCollection.find({ _id: id }).toArray()
+  createUser = (name, address, email, phone) => this.userCollection.insertOne({ name, address, email, phone })
 }

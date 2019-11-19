@@ -6,7 +6,7 @@ dotenv.config()
 export class Posts {
   postCollection: any
 
-  constructor () {
+  constructor() {
     mongodb.MongoClient.connect(`${process.env.MONGODB_URL}:${process.env.PORT}`, { useUnifiedTopology: true }, (_err, client) => {
       this.postCollection = client.db('totvs_devs').collection('posts')
     })
@@ -14,4 +14,6 @@ export class Posts {
 
   getPosts = () => this.postCollection.find({}).toArray()
   getPost = (id) => this.postCollection.find({ _id: id }).toArray()
+
+  createPost = (title, description) => this.postCollection.insertOne({ title, description })
 }
