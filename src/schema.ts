@@ -25,7 +25,7 @@ const postType = new GraphQLObjectType({
     author: {
       type: userType,
       resolve: (source, _params) => {
-        return user.getUser(source.userId) // relacionamento
+        return user.getUser(source.userId)
       }
     }
   }
@@ -40,7 +40,7 @@ const queryType = new GraphQLObjectType({
         id: { type: GraphQLInt }
       },
       resolve: (_source, { id }) => {
-        return posts.getPost(id) // entidade
+        return posts.getPost(id)
       }
     },
     posts: {

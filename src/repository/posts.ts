@@ -1,12 +1,17 @@
-import fetch from 'node-fetch'
 import * as dotenv from 'dotenv'
+import mongodb from 'mongodb'
 
 dotenv.config()
 
 export class Posts {
-  getPosts = () => fetch(`${process.env.API_URL}posts`).then(res => res.json())
+  postCollection: any
 
-  getPost = (id: number) => fetch(`${process.env.API_URL}posts/${id}`).then(res => res.json())
+  constructor () {
+    mongodb.MongoClient.connect(`${process.env.MONGODB_URL}:${process.env.PORT}`, { useUnifiedTopology: true }, (_err, client) => {
+      this.postCollection = client.db('totvs_devs').collection('posts')
+    })
+  }
 
-  getPostByUser = (userId: number) => fetch(`${process.env.API_URL}posts?userId=${userId}`).then(res => res.json())
+  getPosts = () => this.postCollection.find({}).toArray()
+  getPost = (id) => this.postCollection.find({ _id: id }).toArray()
 }
