@@ -7,7 +7,7 @@ export class Posts {
   postCollection: any
 
   constructor () {
-    mongodb.MongoClient.connect(`${process.env.MONGODB_URL}:${process.env.PORT}`, { useUnifiedTopology: true }, (_err, client) => {
+    mongodb.MongoClient.connect(process.env.MONGODB_URL, { useUnifiedTopology: true }, (_err, client) => {
       this.postCollection = client.db('totvs_devs').collection('posts')
     })
   }

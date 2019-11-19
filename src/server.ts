@@ -8,7 +8,6 @@ const posts = new Posts()
 const users = new Users()
 
 const schema = require('./schema')
-
 require('dotenv').config()
 
 const app = express()
@@ -47,6 +46,6 @@ app.use('/graphql', graphqlHTTP({
   graphiql: true
 }))
 
-app.listen(3000, _ => {
-  console.log('🚀  Server ready at http://localhost:3000')
+app.listen(process.env.PORT, _ => {
+  console.log(`🚀  Server ready at http://localhost:${process.env.PORT}`)
 })
