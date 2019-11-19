@@ -31,7 +31,7 @@ spec:
             httpGet:
               path: /
               port: 3000
-            initialDelaySeconds: 90
+            initialDelaySeconds: 30
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
@@ -42,6 +42,8 @@ spec:
           env:
             - name: PORT
               value: "3000"
+            - name: MONGODB_URL
+              value: "mongodb://mongodb.default.svc.cluster.local:27017"
           ports:
             - containerPort: 3000
               name: http
