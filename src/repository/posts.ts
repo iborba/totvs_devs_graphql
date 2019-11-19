@@ -14,4 +14,6 @@ export class Posts {
 
   getPosts = () => this.postCollection.find({}).toArray()
   getPost = (id) => this.postCollection.find({ _id: id }).toArray()
+
+  createPost = (title, description) => this.postCollection.insertOne({ title, description })
 }
