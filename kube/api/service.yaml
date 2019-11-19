@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: graphql-api
+spec:
+  selector:
+    name: graphql-api
+    env: production
+  type: ClusterIP
+  ports:
+    - name: graphql-api
+      port: 80
+      targetPort: http
