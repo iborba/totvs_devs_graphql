@@ -1,18 +1,13 @@
 import * as dotenv from 'dotenv'
-import mongodb from 'mongodb'
+import { Collection } from 'mongodb'
 
 dotenv.config()
 
 export class Users {
-  userCollection: any
+  static collectionName: string = 'users'
+  constructor (private readonly collection: Collection) { }
 
-  constructor () {
-    mongodb.MongoClient.connect(process.env.MONGODB_URL, { useUnifiedTopology: true }, (_err, client) => {
-      this.userCollection = client.db('totvs_devs').collection('users')
-    })
-  }
-
-  getUsers = () => this.userCollection.find({}).toArray()
-  getUser = (id) => this.userCollection.find({ _id: id }).toArray()
-  createUser = (name, address, email, phone) => this.userCollection.insertOne({ name, address, email, phone })
+  getUsers = () => this.collection.find({}).toArray()
+  getUser = (id) => this.collection.find({ _id: id }).toArray()
+  createUser = (name, address, email, phone) => this.collection.insertOne({ name, address, email, phone })
 }
