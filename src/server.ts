@@ -15,7 +15,6 @@ const app = express()
 app.use(bodyparser.json())
 app.use(cors({ origin: '*' }))
 
-
 app.get('/', (_req, res) => {
   return res.status(200).send('Hello world')
 })
@@ -29,13 +28,13 @@ app.post('/posts', (req, res) => {
   const { title, description } = req.body
 
   posts.createPost(title, description)
-  return res.status(200).send("Post criado com sucesso")
+  return res.status(200).send('Post criado com sucesso')
 })
 
 app.post('/authors', (req, res) => {
   const { name, address, email, phone } = req.body
   users.createUser(name, address, email, phone)
-  return res.status(200).send("Usuário criado com sucesso")
+  return res.status(200).send('Usuário criado com sucesso')
 })
 
 app.get('/authors', async (_req, res) => {
