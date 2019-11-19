@@ -4,7 +4,6 @@ import { Collection } from 'mongodb'
 dotenv.config()
 
 export class Posts {
-
   static collectionName: string = 'posts'
 
   constructor (private readonly collection: Collection) { }

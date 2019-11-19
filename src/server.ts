@@ -8,13 +8,13 @@ import { MongoClient } from 'mongodb'
 
 (async function () {
   const connection = await MongoClient.connect(process.env.MONGODB_URL, { useUnifiedTopology: true })
+
   const db = connection.db('totvs_devs')
   const posts = new Posts(db.collection(Posts.collectionName))
   const users = new Users(db.collection(Users.collectionName))
 
   const schema = require('./schema')
   require('dotenv').config()
-
 
   const app = express()
   app.use(bodyparser.json())
