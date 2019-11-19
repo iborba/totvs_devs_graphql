@@ -19,6 +19,11 @@ mongodb.MongoClient.connect(`${process.env.MONGODB_URL}:${process.env.PORT}`, { 
     return res.status(200).send('Hello world')
   })
 
+  app.get('/posts', async (_req, res) => {
+    const result = await postsCollection.find({}).toArray()
+    return res.status(200).send(result)
+  })
+
   app.post('/posts', (req, res) => {
     const { title, description } = req.body
 
