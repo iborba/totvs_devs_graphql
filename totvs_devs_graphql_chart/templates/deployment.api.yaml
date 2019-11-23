@@ -73,37 +73,36 @@ spec:
   selector:
     name: {{ $name }}
     env: {{ .Values.environment }}
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - name: {{ $name }}
       port: 80
       targetPort: http
 ---
-apiVersion: autoscaling/v2beta2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: {{ $name }}
-  labels:
-    app: {{ $name }}
-    env: {{ .Values.environment }}
-    role: scaler
-spec:
-  scaleTargetRef:
-    kind: Deployment
-    name: {{ $name }}
-  minReplicas: 1
-  maxReplicas: 100
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        target:
-          type: Utilization
-          averageUtilization: 50
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 70
----
+# apiVersion: autoscaling/v2beta2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: {{ $name }}
+#   labels:
+#     app: {{ $name }}
+#     env: {{ .Values.environment }}
+#     role: scaler
+# spec:
+#   scaleTargetRef:
+#     kind: Deployment
+#     name: {{ $name }}
+#   minReplicas: 1
+#   maxReplicas: 100
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: cpu
+#         target:
+#           type: Utilization
+#           averageUtilization: 50
+#     - type: Resource
+#       resource:
+#         name: memory
+#         target:
+#           type: Utilization
+#           averageUtilization: 70
