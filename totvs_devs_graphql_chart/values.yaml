@@ -1,0 +1,4 @@
+registry: israelborba/totvs_devs_graphql
+replicaCount: 1
+mongodb_url: mongodb://mongodb.default.svc.cluster.local:27017
+environment: production
