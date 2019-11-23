@@ -1,9 +1,11 @@
 {
   "name": "totvs_devs_graphql",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A project written with Typescript, Sucrase and GraphQL",
   "main": "server.js",
   "scripts": {
+    "mongostart": "docker run -d --name mongocontainer -p 17017:27017 mvertes/alpine-mongo",
+    "mongostop": "docker stop mongocontainer && docker rm mongocontainer",
     "dev": "nodemon src/server.ts",
     "start": "node dist/server.js",
     "build": "sucrase ./src -d ./dist --transforms typescript,imports"
@@ -13,7 +15,7 @@
     "url": "git+https://github.com/iborba/totvs_devs_graphql.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Israel Borba (@iborba)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/iborba/totvs_devs_graphql/issues"
