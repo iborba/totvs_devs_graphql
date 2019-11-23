@@ -3,28 +3,26 @@ import graphqlHTTP from 'express-graphql'
 import bodyparser from 'body-parser'
 import cors from 'cors'
 import { Posts } from './repository/posts'
-import { Users } from './repository/users'
 import { MongoClient } from 'mongodb'
 
 (async function () {
+  require('dotenv').config()
+
   const connection = await MongoClient.connect(process.env.MONGODB_URL, { useUnifiedTopology: true })
 
   const db = connection.db('totvs_devs')
   const posts = new Posts(db.collection(Posts.collectionName))
-  const users = new Users(db.collection(Users.collectionName))
-
   const schema = require('./schema')
-  require('dotenv').config()
 
   const app = express()
   app.use(bodyparser.json())
   app.use(cors({ origin: '*' }))
 
-  app.get('/', (_req, res) => {
+  app.get('/', ({ res }) => {
     return res.status(200).send('Hello world')
   })
 
-  app.get('/posts', async (_req, res) => {
+  app.get('/posts', async ({ res }) => {
     const result = await posts.getPosts()
     return res.status(200).send(result)
   })
@@ -34,17 +32,6 @@ import { MongoClient } from 'mongodb'
 
     posts.createPost(title, description)
     return res.status(200).send('Post criado com sucesso')
-  })
-
-  app.post('/authors', (req, res) => {
-    const { name, address, email, phone } = req.body
-    users.createUser(name, address, email, phone)
-    return res.status(200).send('Usuário criado com sucesso')
-  })
-
-  app.get('/authors', async (_req, res) => {
-    const result = await users.getUsers()
-    return res.status(200).send(result)
   })
 
   app.use('/graphql', graphqlHTTP({

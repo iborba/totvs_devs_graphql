@@ -1,34 +1,20 @@
-import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLList, GraphQLSchema } from 'graphql'
-import { Users } from './repository/users'
+import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLSchema } from "graphql"
 import { Posts } from './repository/posts'
-const user = new Users()
-const posts = new Posts()
-
-const userType = new GraphQLObjectType({
-  name: 'Author',
-  fields: {
-    id: { type: GraphQLID! },
-    name: { type: GraphQLString },
-    email: { type: GraphQLString },
-    username: { type: GraphQLString },
-    phone: { type: GraphQLString },
-    website: { type: GraphQLString }
-  }
-})
+import { MongoClient } from 'mongodb'
 
 const postType = new GraphQLObjectType({
   name: 'Post',
   fields: {
-    id: { type: GraphQLID! },
+    id: { type: GraphQLString! },
     title: { type: GraphQLString! },
-    body: { type: GraphQLString },
-    author: {
-      type: userType,
-      resolve: (source, _params) => {
-        return user.getUser(source.userId)
-      }
-    }
+    body: { type: GraphQLString }
   }
+})
+const getConn = (async () => {
+  const connection = await MongoClient.connect(process.env.MONGODB_URL, { useUnifiedTopology: true })
+
+  const db = connection.db('totvs_devs')
+  return new Posts(db.collection(Posts.collectionName))
 })
 
 const queryType = new GraphQLObjectType({
@@ -37,31 +23,19 @@ const queryType = new GraphQLObjectType({
     post: {
       type: postType,
       args: {
-        id: { type: GraphQLInt }
+        id: { type: GraphQLString }
       },
-      resolve: (_source, { id }) => {
+      resolve: async (_source, { id }) => {
+        const posts = await getConn()
         return posts.getPost(id)
       }
     },
     posts: {
       type: new GraphQLList(postType),
-      resolve: () => {
+      resolve: async () => {
+        const posts = await getConn()
+        
         return posts.getPosts()
-      }
-    },
-    author: {
-      type: userType,
-      args: {
-        id: { type: GraphQLID! }
-      },
-      resolve: (_source, { id }) => {
-        return user.getUser(id)
-      }
-    },
-    authors: {
-      type: new GraphQLList(userType),
-      resolve: () => {
-        return user.getUsers()
       }
     }
   }
