@@ -1,4 +1,12 @@
-registry: israelborba/totvs_devs_graphql
 replicaCount: 1
 mongodb_url: mongodb://mongodb.default.svc.cluster.local:27017
 environment: production
+
+namespace: stage
+name: graphql
+image:
+  name: totvs_devs_graphql
+  defaultRegistry: israelborba/
+
+use:
+  service: true
