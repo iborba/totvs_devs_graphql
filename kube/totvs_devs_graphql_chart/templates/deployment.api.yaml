@@ -1,4 +1,4 @@
-{{ $name := "graphql-api" }}
+{{ $name := .Values.name }}
 
 apiVersion: extensions/v1beta1
 kind: Deployment
