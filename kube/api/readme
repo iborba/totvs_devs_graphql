@@ -1,0 +1,1 @@
+k exec -it mongo-mongodb-primary-0 -- sh -c 'mongo --eval="printjson(rs.isMaster())"'
