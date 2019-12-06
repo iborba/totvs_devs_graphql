@@ -1,14 +1,16 @@
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: graphql-api
-  annotations:
-    kubernetes.io/ingress.class: addon-http-application-routing
-spec:
-  rules:
-    - host: simpleapi.f8b8184f326740f9b169.eastus.aksapp.io
-      http:
-        paths:
-          - backend:
-              serviceName: graphql-api
-              servicePort: graphql-api
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: graphql-ingress
+#   namespace: stage
+#   annotations:
+#     kubernetes.io/ingress.class: nginx
+# spec:
+#   rules:
+#     - host: iborba.dnsabr.com
+#       http:
+#         paths:
+#           - backend:
+#               serviceName: graphql
+#               servicePort: 80
+#             path: /

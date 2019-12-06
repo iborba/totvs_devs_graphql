@@ -1,1 +1,8 @@
 k exec -it mongo-mongodb-primary-0 -- sh -c 'mongo --eval="printjson(rs.isMaster())"'
+
+helm install nginx-ingress stable/nginx-ingress \
+  --namespace stage \
+  --set rbac.create=true \
+  --set controller.publishService.enabled=true \
+  --set controller.scope.enabled=true \
+  --set controller.scope.namespace=stage

@@ -19,7 +19,7 @@ import { MongoClient } from 'mongodb'
   app.use(cors({ origin: '*' }))
 
   app.get('/', ({ res }) => {
-    return res.status(200).send('Hello world')
+    return res.status(200).send('🚀  Hello world Grapqhl')
   })
 
   app.get('/posts', async ({ res }) => {

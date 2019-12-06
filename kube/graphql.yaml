@@ -9,8 +9,14 @@ image:
 use:
   service: true
 
+# service:
+#   type: LoadBalancer
+#   ports:
+#     - name: port-80
+#       port: 80
+#       targetPort: 3000
 service:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - name: port-80
       port: 80
@@ -21,6 +27,6 @@ container:
     - name: PORT
       value: "3000"
     - name: MONGODB_URL
-      value: mongodb://root:123qwe@mongo-mongodb-secondary-0.mongo-mongodb-headless.stage.svc.cluster.local:27017
-      # value: mongodb://root:123qwe@mongo-mongodb-primary-0.mongo-mongodb-headless.stage.svc.cluster.local:27017
+      value: mongodb://root:123qwe@mongo-mongodb-primary-0.mongo-mongodb-headless.stage.svc.cluster.local:27017
+      # value: mongodb://root:123qwe@mongo-mongodb-secondary-0.mongo-mongodb-headless.stage.svc.cluster.local:27017
       # value: mongodb://root:123qwe@10.12.13.189:27017
