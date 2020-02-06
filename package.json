@@ -4,9 +4,9 @@
   "description": "A project written with Typescript, Sucrase and GraphQL",
   "main": "server.js",
   "scripts": {
-    "mongostart": "docker run -d --name mongocontainer -p 17017:27017 mvertes/alpine-mongo",
     "mongostop": "docker stop mongocontainer && docker rm mongocontainer",
-    "dev": "nodemon src/server.ts",
+    "mongostart": "docker run -d --name mongocontainer -p 17017:27017 mvertes/alpine-mongo",
+    "dev": "(sleep 0.1 && npm run -s mongostop) & (sleep 3 && npm run -s mongostart) & (sleep 1 && nodemon src/server.ts)",
     "start": "node dist/server.js",
     "build": "sucrase ./src -d ./dist --transforms typescript,imports"
   },
